@@ -1,7 +1,5 @@
-# info441-final_project_group6
-Building an application that connects content creators with video editors
-
-Proposal:
+# Group 6's Final Project Proposal
+INFO 441 Final Project proposal by group 6 - By: Gurleen Samra, Keira Wong, Keira Wong, Mekias Kebede, Tony Wu
 
 Project Description:
 
