@@ -14,6 +14,7 @@ We were drawn to this project because it addresses problems we've personally obs
 Architectural Diagram:
 
 Data Flow:
+![Data Flow Diagram](docs/data-flow.png)
 
 User Stories:
 
