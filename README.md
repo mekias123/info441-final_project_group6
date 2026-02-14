@@ -1,5 +1,6 @@
 # Group 6's Final Project Proposal
-INFO 441 Final Project proposal by group 6 - By: Gurleen Samra, Keira Wong, Keira Wong, Mekias Kebede, Tony Wu
+INFO 441 Final Project proposal by group 6
+By: Gurleen Samra, Keira Wong, Keira Wong, Mekias Kebede, Tony Wu
 
 Project Description:
 
@@ -9,82 +10,22 @@ Unlike generalized freelance platforms that cover everything from graphic design
 We were drawn to this project because it addresses problems we've personally observed in our own communities. Many of our peers who create content for YouTube, TikTok, or Instagram struggle with the editing obstacle where they have strong ideas and can film consistently, but editing feels overwhelming or produces results that don't match their vision. Simultaneously, we know talented video editors in film programs or early in their careers who struggle to find steady freelance work because they lack industry connections or don't know how to market themselves effectively. Existing platforms don't adequately serve either group because they're not designed with the specific workflows of video production in mind. Building a focused marketplace that solves these pain points through thoughtful system design feels like a meaningful contribution to the creator economy, and it combines practical problem-solving with an interesting technical challenge. This is a platform we would realistically use ourselves as students interested in content creation who understand both the value of high-quality edited content and the challenge of producing it consistently.
 
 
-
-
 Architectural Diagram:
+
+![Architectural Diagram](docs/Architectural_Diagram.png)
 
 Data Flow:
 ![Data Flow Diagram](docs/data-flow.png)
 
 User Stories:
 
-
-
-
-
-
+![User Stories](docs/user_stories.png)
 
 API Endpoints:
 
-Authentication & Users
-POST /auth/register - Allows users to register as a creator or editor
-POST /auth/login - Allows users to log into their account
-GET /user/profile - Allows users to view their own profile
-PUT /user/profile - Allows users to update their profile information
-Projects
-POST /project/create - Allows creators to create a new editing project
-GET /project/:id - Allows users to view a specific project
-PUT /project/:id - Allows creators to update project details
-GET /editor/search - Allows creators to search for editors
-Proposals & Hiring
-POST /proposal/submit - Allows editors to submit proposals for projects
-GET /project/:id/proposals - Allows creators to view proposals for their project
-PUT /proposal/:id/accept - Allows creators to accept a proposal
-Payments
-POST /project/:id/payment - Processes payment for completed projects
-GET /transaction/history - Allows users to view transaction history.
-
-
-
-
+![API Endpoints](docs/apis.png)
 
 Database Schemas:
-Users
-userID (Number)
-email (String)
-passwordHash (String)
-userType (Enum: 'creator', 'editor')
-firstName (String)
-lastName (String)
-EditorProfiles
-editorID (Number)
-userID (Number)
-bio (String)
-skills (Array of Strings)
-hourlyRate (Number)
-portfolioItems (Array of URLs)
-averageRating (Number)
-Projects
-projectID (Number)
-creatorID (Number)
-assignedEditorID (Number)
-title (String)
-description (String)
-budget (Number)
-deadline (Date)
-status (Enum: 'open', 'in-progress', 'completed')
-rawFootageLinks (Array of URLs)
-Proposals
-proposalID (Number)
-projectID (Number)
-editorID (Number)
-proposedRate (Number)
-coverLetter (String)
-status (Enum: 'pending', 'accepted', 'declined')
-Transactions
-transactionID (Number)
-projectID (Number)
-creatorID (Number)
-editorID (Number)
-amount (Number)
-status (Enum: 'pending', 'completed', 'refunded')
+
+![DataBase Schemas](docs/database_scheme.png)
+
