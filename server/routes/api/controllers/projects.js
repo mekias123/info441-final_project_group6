@@ -2,8 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 // All routes here will start with the path /api/project
+// Note to the person who implemented job submission: 
+//     Don't create a new route for creation (ex:router.post('/create'))
+//     , the request type (POST, GET, etc.) is meant to clarify that for you
 
-router.post('/create', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const { title, description, deadline, budget } = req.body;
 
@@ -19,14 +22,16 @@ router.post('/create', async (req, res) => {
     }
 });
 
-router.get('/'), async (req, res) => {
+router.get('/', async (req, res) => {
+    console.log("Project posting Requested")
     try {
-
-        const postings = await req.Project.find({ post: postID })
-
+        const postings = await req.project_model.find()
+        // console.log(postings)
+        res.send(postings)
+        // return postings;
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-}
+});
 
 module.exports = router;

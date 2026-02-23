@@ -18,17 +18,14 @@ export default function PostJob() {
 		setMessage(null);
 
 		try {
-			const res = await fetch(
-				"http://localhost:3001/api/project/create",
-				{
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({
-						...form,
-						budget: Number(form.budget),
-					}),
-				},
-			);
+			const res = await fetch("http://localhost:3001/api/project", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					...form,
+					budget: Number(form.budget),
+				}),
+			});
 
 			const data = await res.json();
 

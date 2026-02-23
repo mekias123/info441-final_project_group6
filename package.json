@@ -4,7 +4,7 @@
 	"description": "EditConnect - Content Creator & Editor Collaboration Platform",
 	"scripts": {
 		"server": "node server/index.js",
-		"client": "cd client && npm start",
+		"client": "cd client && npm run dev", 
 		"install-all": "npm install && cd client && npm install"
 	},
 	"dependencies": {
