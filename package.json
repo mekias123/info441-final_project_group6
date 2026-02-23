@@ -1,0 +1,16 @@
+{
+  "name": "info441-final-project-group6",
+  "version": "1.0.0",
+  "description": "EditConnect - Content Creator & Editor Collaboration Platform",
+  "scripts": {
+    "server": "node server/index.js",
+    "client": "cd client && npm start",
+    "install-all": "npm install && cd client && npm install"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5"
+  }
+}
