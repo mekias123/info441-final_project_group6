@@ -7,7 +7,6 @@ export default function PostingBoard() {
   const [editorID, setEditorID] = useState("");
   const [proposalsByProjectId, setProposalsByProjectId] = useState({});
 
-  // Fetch all projects
   async function fetchPosts() {
     try {
       const data = await fetchJSON("http://localhost:3001/api/project");
@@ -17,12 +16,10 @@ export default function PostingBoard() {
     }
   }
 
-  // Load projects on first render
   useEffect(() => {
     fetchPosts();
   }, []);
 
-  // Submit proposal
   async function applyToProject(projectId) {
     if (!editorID.trim() || !coverLetter.trim()) {
       alert("Editor ID and cover letter required");
@@ -47,19 +44,16 @@ export default function PostingBoard() {
         return;
       }
 
-      // Clear form and collapse
       setCoverLetter("");
       setEditorID("");
       setActiveProjectId(null);
 
-      // Refresh proposals for this project
       await viewProposals(projectId);
     } catch (err) {
       console.error(err);
     }
   }
 
-  // Get proposals for a project
   async function viewProposals(projectId) {
     try {
       const data = await fetchJSON(
@@ -126,9 +120,7 @@ export default function PostingBoard() {
                       onChange={(e) => setCoverLetter(e.target.value)}
                     />
                     <br />
-                    <button
-                      onClick={() => applyToProject(project._id)}
-                    >
+                    <button onClick={() => applyToProject(project._id)}>
                       Submit Application
                     </button>
                   </td>
@@ -158,7 +150,6 @@ export default function PostingBoard() {
   );
 }
 
-// Utility fetch helper
 async function fetchJSON(route, options) {
   let response;
   try {
@@ -179,6 +170,5 @@ async function fetchJSON(route, options) {
   } catch (error) {
     console.log(error);
   }
-
   return responseJson;
 }

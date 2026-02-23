@@ -28,9 +28,7 @@ router.get('/', async (req, res) => {
     console.log("Project posting Requested")
     try {
         const postings = await req.project_model.find()
-        // console.log(postings)
         res.send(postings)
-        // return postings;
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -50,7 +48,6 @@ router.post('/:projectId/proposals', async (req, res) => {
             return res.status(400).json({ error: "editorID and coverLetter are required." });
         }
 
-        // Optional: check project exists (helps avoid junk proposals)
         const project = await req.project_model.findById(projectId);
         if (!project) {
             return res.status(404).json({ error: "Project not found." });
@@ -67,7 +64,6 @@ router.post('/:projectId/proposals', async (req, res) => {
         res.status(201).json(saved);
 
     } catch (err) {
-        // Duplicate application (if Proposal model has unique index)
         if (err.code === 11000) {
             return res.status(409).json({ error: "You already applied to this project." });
         }
@@ -83,7 +79,6 @@ router.get('/:projectId/proposals', async (req, res) => {
     try {
         const { projectId } = req.params;
 
-        // Optional: check project exists
         const project = await req.project_model.findById(projectId);
         if (!project) {
             return res.status(404).json({ error: "Project not found." });

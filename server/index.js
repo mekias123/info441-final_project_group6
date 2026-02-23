@@ -20,14 +20,9 @@ app.use((req, res, next) => {
 const Router = require("./routes/router");
 app.use('/api', Router);
 
-
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
         console.log('Connected to MongoDB');
-        app.listen(PORT, () => 
-            console.log(`Server running on port ${PORT}`)
-        );
+        app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
     })
-    .catch((err) => 
-        console.error('MongoDB connection error:', err)
-    );
+    .catch((err) => console.error('MongoDB connection error:', err));
