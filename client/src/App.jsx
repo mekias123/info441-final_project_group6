@@ -1,7 +1,11 @@
-import PostJob from './components/PostJob';
+import PostJob from "./components/PostJob";
 
 function App() {
-  return <PostJob />;
+	return (
+		<div>
+			<PostJob />;
+		</div>
+	);
 }
 
 export default App;
