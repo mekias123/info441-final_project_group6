@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+const API = import.meta.env.VITE_API_URL || "http://localhost:3001";
 export default function PostingBoard() {
   const [postsJson, setPostsJson] = useState([]);
   const [activeProjectId, setActiveProjectId] = useState(null);
@@ -9,7 +9,7 @@ export default function PostingBoard() {
 
   async function fetchPosts() {
     try {
-      const data = await fetchJSON("http://localhost:3001/api/project");
+      const data = await fetchJSON(`${API}/api/project`);
       setPostsJson(data || []);
     } catch (error) {
       console.error("Failed to fetch posts:", error);
@@ -28,7 +28,7 @@ export default function PostingBoard() {
 
     try {
       const response = await fetchJSON(
-        `http://localhost:3001/api/project/${projectId}/proposals`,
+        `${API}/api/project/${projectId}/proposals`,
         {
           method: "POST",
           body: {
@@ -57,7 +57,7 @@ export default function PostingBoard() {
   async function viewProposals(projectId) {
     try {
       const data = await fetchJSON(
-        `http://localhost:3001/api/project/${projectId}/proposals`
+        `${API}/api/project/${projectId}/proposals`
       );
 
       setProposalsByProjectId((prev) => ({
