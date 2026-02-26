@@ -2,6 +2,8 @@
 INFO 441 Final Project proposal by group 6
 By: Gurleen Samra, Keira Wong, Keira Wong, Mekias Kebede, Tony Wu
 
+Link to MVP on render: https://info441-final-project-group6-1-client.onrender.com
+
 Project Description:
 
 Our app is a marketplace platform that connects content creators with video editors, built to address inefficiencies in how freelance editing work is currently found, managed, and completed. The primary audience for this application is content creators across various platforms, including YouTubers, TikTokers, Instagram creators, corporate social media managers, and small business owners who produce video content regularly but lack the time, skills, or resources to edit it themselves. While video editors represent an important user group on our platform, we're focusing our design decisions primarily on the creator experience, as they are the ones initiating projects and driving demand for editing services.
