@@ -7,6 +7,8 @@ const projectSchema = new mongoose.Schema({
     budget: { type: Number, required: true },
     creatorID: { type: String, default: null },
     assignedEditorID: { type: String, default: null },
+    // New: allow multiple accepted editors
+    assignedEditorIDs: { type: [String], default: [] },
     status: {
         type: String,
         enum: ['open', 'in-progress', 'completed'],

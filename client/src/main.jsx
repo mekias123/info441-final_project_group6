@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import PostJob from "./components/PostJob";
 import PostingBoard from "./components/PostingBoard";
+import CreatorDashboard from "./components/CreatorDashboard";
 
 createRoot(document.getElementById("root")).render(
 	<StrictMode>

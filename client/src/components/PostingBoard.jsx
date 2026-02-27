@@ -136,7 +136,8 @@ export default function PostingBoard() {
                     )}
                     {proposalsByProjectId[project._id].map((p) => (
                       <div key={p._id}>
-                        <strong>{p.editorID}</strong>: {p.coverLetter}
+                        {/* <strong>{p.editorID}</strong>: {p.coverLetter} */}
+                        <strong>{p.editorID}</strong> ({p.status}): {p.coverLetter}
                       </div>
                     ))}
                   </td>
