@@ -19,7 +19,7 @@ Architectural Diagram:
 Data Flow:
 ![Data Flow Diagram](docs/data-flow.png)
 
-User Stories:
+User Stories: ...
 
 ![User Stories](docs/user_stories.png)
 
