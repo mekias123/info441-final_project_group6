@@ -10,6 +10,7 @@ export default function PostingBoard() {
 	async function fetchPosts() {
 		try {
 			const titleVal = document.getElementById("title")?.value || "";
+			const creatorIdVal = document.getElementById("creator-id")?.value;
 			const budgetMinVal = document.getElementById("budget-min")?.value;
 			const budgetMaxVal = document.getElementById("budget-max")?.value;
 			const isOpenChecked = document.getElementById("is-open")?.checked;
@@ -19,6 +20,7 @@ export default function PostingBoard() {
 				params.append("title", titleVal.trim());
 			if (budgetMinVal) params.append("budgetMin", budgetMinVal);
 			if (budgetMaxVal) params.append("budgetMax", budgetMaxVal);
+			if (creatorIdVal) params.append("creatorID", creatorIdVal);
 
 			// only append isOpen when the checkbox is checked (true)
 			if (typeof isOpenChecked === "boolean") {
@@ -95,6 +97,9 @@ export default function PostingBoard() {
 
 			<label for="title">Title:</label>
 			<input type="text" id="title" name="title" />
+
+			<label for="creator-id">Creator ID:</label>
+			<input type="number" id="creator-id" name="creatorID" />
 
 			<label for="budget-min">Budget Min:</label>
 			<input type="number" id="budget-min" name="Budget Min" />

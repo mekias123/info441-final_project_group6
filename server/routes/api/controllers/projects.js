@@ -7,13 +7,19 @@ const Proposal = require("../../../models/Proposal");
 
 router.post('/', async (req, res) => {
     try {
-        const { title, description, deadline, budget } = req.body;
+        const { title, description, deadline, budget, creatorID } = req.body;
 
         if (!title || !description || !deadline || budget == null) {
             return res.status(400).json({ error: 'Title, description, deadline, and budget are required.' });
         }
 
-        const project = new req.project_model({ title, description, deadline, budget });
+        // coerce creatorID to string when saving so it matches the schema
+        const projectData = { title, description, deadline, budget };
+        if (typeof creatorID !== 'undefined' && creatorID !== null) {
+            projectData.creatorID = String(creatorID);
+        }
+
+        const project = new req.project_model(projectData);
         const saved = await project.save();
         res.status(201).json(saved);
     } catch (err) {
@@ -34,8 +40,9 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     console.log("Project posting Requested")
     try {
-        const { status, title, budgetMin, budgetMax, isOpen } = req.query;
+        const { status, title, budgetMin, budgetMax, isOpen, creatorID } = req.query;
 
+        console.log(creatorID)
 
         const filter = {};
 
@@ -54,6 +61,12 @@ router.get('/', async (req, res) => {
 
         if (title && String(title).trim()) {
             filter.title = { $regex: String(title).trim(), $options: 'i' };
+        }
+
+        // Filter by creatorID (exact numeric match when possible)
+        if (typeof creatorID !== 'undefined' && creatorID !== '') {
+            // store and compare as string to match Project schema
+            filter.creatorID = String(creatorID);
         }
 
         if (budgetMin || budgetMax) {

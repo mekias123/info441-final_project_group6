@@ -6,6 +6,7 @@ export default function PostJob() {
 		description: "",
 		deadline: "",
 		budget: "",
+		creatorID: "",
 	});
 	const [message, setMessage] = useState(null);
 
@@ -24,6 +25,7 @@ export default function PostJob() {
 				body: JSON.stringify({
 					...form,
 					budget: Number(form.budget),
+					creatorID: Number(form.creatorID),
 				}),
 			});
 
@@ -41,7 +43,13 @@ export default function PostJob() {
 				type: "success",
 				text: `Job "${data.title}" posted successfully!`,
 			});
-			setForm({ title: "", description: "", deadline: "", budget: "" });
+			setForm({
+				title: "",
+				description: "",
+				deadline: "",
+				budget: "",
+				creatorID: "",
+			});
 		} catch (err) {
 			setMessage({ type: "error", text: "Failed to connect to server." });
 		}
@@ -131,6 +139,25 @@ export default function PostJob() {
 						type="number"
 						name="budget"
 						value={form.budget}
+						onChange={handleChange}
+						required
+						min="0"
+						step="0.01"
+						style={{
+							display: "block",
+							width: "100%",
+							padding: "0.5rem",
+							marginTop: "0.25rem",
+						}}
+					/>
+				</label>
+
+				<label>
+					Your Creator ID
+					<input
+						type="number"
+						name="creatorID"
+						value={form.creatorID}
 						onChange={handleChange}
 						required
 						min="0"
