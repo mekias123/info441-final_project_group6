@@ -34,16 +34,46 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     console.log("Project posting Requested")
     try {
-        const { status } = req.query;
+        const { status, title, budgetMin, budgetMax, isOpen } = req.query;
+
 
         const filter = {};
-        // Default behavior: only show open postings (so accepted jobs disappear)
-        if (!status || status === "open") filter.status = "open";
-        else if (status !== "all") filter.status = status;
+
+        if (typeof isOpen !== 'undefined') {
+            if (isOpen === 'true') {
+                filter.status = 'open';
+            } else if (isOpen === 'false') {
+                // show only non-open projects (closed / in-progress / completed)
+                filter.status = { $ne: 'open' };
+            }
+        } else {
+            // Default behavior: only show open postings (so accepted jobs disappear)
+            if (!status || status === "open") filter.status = "open";
+            else if (status !== "all") filter.status = status;
+        }
+
+        if (title && String(title).trim()) {
+            filter.title = { $regex: String(title).trim(), $options: 'i' };
+        }
+
+        if (budgetMin || budgetMax) {
+            filter.budget = {};
+            if (budgetMin) {
+                const min = Number(budgetMin);
+                if (!Number.isNaN(min)) filter.budget.$gte = min;
+            }
+            if (budgetMax) {
+                const max = Number(budgetMax);
+                if (!Number.isNaN(max)) filter.budget.$lte = max;
+            }
+            if (Object.keys(filter.budget).length === 0) delete filter.budget;
+        }
 
         const postings = await req.project_model.find(filter).sort({ createdAt: -1 });
+        // console.log(postings)
         res.send(postings);
     } catch (err) {
+        console.log(err)
         res.status(500).json({ error: err.message });
     }
 });

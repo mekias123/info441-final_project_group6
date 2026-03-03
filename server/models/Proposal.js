@@ -1,31 +1,31 @@
 const mongoose = require("mongoose");
 
 const proposalSchema = new mongoose.Schema(
-  {
-    projectId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Project",
-      required: true,
+    {
+        projectId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Project",
+            required: true,
+        },
+        editorID: {
+            type: String,
+            required: true,
+        },
+        coverLetter: {
+            type: String,
+            required: true,
+        },
+        proposedRate: {
+            type: Number,
+            default: null,
+        },
+        status: {
+            type: String,
+            enum: ["pending", "accepted", "rejected"],
+            default: "pending",
+        },
     },
-    editorID: {
-      type: String,
-      required: true,
-    },
-    coverLetter: {
-      type: String,
-      required: true,
-    },
-    proposedRate: {
-      type: Number,
-      default: null,
-    },
-    status: {
-      type: String,
-      enum: ["pending", "accepted", "rejected"],
-      default: "pending",
-    },
-  },
-  { timestamps: true }
+    { timestamps: true }
 );
 
 // Prevent duplicate applications per editor per project
