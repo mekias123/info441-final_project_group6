@@ -50,7 +50,6 @@ router.get('/', async (req, res) => {
             if (isOpen === 'true') {
                 filter.status = 'open';
             } else if (isOpen === 'false') {
-                // show only non-open projects (closed / in-progress / completed)
                 filter.status = { $ne: 'open' };
             }
         } else {
@@ -63,9 +62,7 @@ router.get('/', async (req, res) => {
             filter.title = { $regex: String(title).trim(), $options: 'i' };
         }
 
-        // Filter by creatorID (exact numeric match when possible)
         if (typeof creatorID !== 'undefined' && creatorID !== '') {
-            // store and compare as string to match Project schema
             filter.creatorID = String(creatorID);
         }
 
