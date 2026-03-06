@@ -9,4 +9,7 @@ router.use("/project", projectRoutes);
 const reviewRoutes = require("./api/controllers/reviews");
 router.use("/review", reviewRoutes);
 
+const annotationRoutes = require("./api/controllers/annotations");
+router.use("/annotation", annotationRoutes);
+
 module.exports = router;
