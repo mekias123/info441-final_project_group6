@@ -3,6 +3,10 @@ const router = express.Router();
 const rateLimit = require("express-rate-limit");
 const Annotation = require("../../../models/Annotation");
 
+function isValidObjectId(id) {
+  return /^[0-9a-fA-F]{24}$/.test(String(id || ""));
+}
+
 // --- Security: Input sanitization ---
 function sanitizeString(str) {
   if (typeof str !== "string") return "";
@@ -56,7 +60,7 @@ router.post("/", writeLimiter, async (req, res) => {
       return res.status(400).json({ error: "Timestamp must be a non-negative number." });
     }
 
-    if (!projectId.match(/^[0-9a-fA-F]{24}$/)) {
+    if (!isValidObjectId(projectId)) {
       return res.status(400).json({ error: "Invalid project ID format." });
     }
 
@@ -86,6 +90,10 @@ router.get("/:projectId", async (req, res) => {
     const { projectId } = req.params;
     const { videoUrl } = req.query;
 
+    if (!isValidObjectId(projectId)) {
+      return res.status(400).json({ error: "Invalid project ID format." });
+    }
+
     const filter = { projectId };
     if (videoUrl) {
       filter.videoUrl = String(videoUrl).trim();
@@ -103,6 +111,10 @@ router.delete("/:annotationId", writeLimiter, async (req, res) => {
   try {
     const { annotationId } = req.params;
     const { authorID } = req.body;
+
+    if (!isValidObjectId(annotationId)) {
+      return res.status(400).json({ error: "Invalid annotation ID format." });
+    }
 
     if (!authorID) {
       return res.status(400).json({ error: "authorID is required." });

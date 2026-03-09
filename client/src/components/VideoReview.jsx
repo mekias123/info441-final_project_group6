@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
@@ -54,6 +54,10 @@ export default function VideoReview() {
       blobUrlRef.current = null;
     }
   }
+  
+  useEffect(() => {
+    return () => cleanupBlobUrl();
+  }, []);
 
   function handleFile(file) {
     setMessage(null);

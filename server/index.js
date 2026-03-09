@@ -20,6 +20,11 @@ app.use((req, res, next) => {
 const Router = require("./routes/router");
 app.use('/api', Router);
 
+if (!process.env.MONGODB_URI) {
+    console.error('Missing MONGODB_URI. Set it in environment variables (Render) or server/.env for local development.');
+    process.exit(1);
+}
+
 mongoose.connect(process.env.MONGODB_URI)
     .then(() => {
         console.log('Connected to MongoDB');
