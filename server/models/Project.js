@@ -11,7 +11,7 @@ const projectSchema = new mongoose.Schema({
     assignedEditorIDs: { type: [String], default: [] },
     status: {
         type: String,
-        enum: ['open', 'in-progress', 'completed'],
+        enum: ['open', 'in-progress', 'closed', 'completed'],
         default: 'open',
     },
     rawFootageLinks: { type: [String], default: [] },

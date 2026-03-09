@@ -26,9 +26,11 @@ export default function CreatorDashboard() {
     }
 
     // status=all lets creators see jobs even after they're closed from public board
-    const { ok, data } = await fetchJSON(`${API}/api/project?status=all`);
+    // const { ok, data } = await fetchJSON(`${API}/api/project?status=all`);
+    const { ok, data } = await fetchJSON(`${API}/api/project?status=all&creatorID=${encodeURIComponent(creatorID.trim())}`);
     if (!ok) return setMessage(data?.error || "Failed to load projects.");
-    setProjects(data || []);
+    // setProjects(data || []);
+    setProjects(Array.isArray(data) ? data : []);
     setMessage(null);
   }
 
@@ -70,6 +72,25 @@ export default function CreatorDashboard() {
 
   const selectedProject = projects.find((p) => p._id === selectedProjectId);
 
+  function formatAssignedEditors(project) {
+    if (!project) return "-";
+
+    if (Array.isArray(project.assignedEditorIDs)) {
+      const joined = project.assignedEditorIDs.filter(Boolean).join(", ");
+      if (joined) return joined;
+    }
+
+    if (typeof project.assignedEditorIDs === "string" && project.assignedEditorIDs.trim()) {
+      return project.assignedEditorIDs.trim();
+    }
+
+    if (typeof project.assignedEditorID === "string" && project.assignedEditorID.trim()) {
+      return project.assignedEditorID.trim();
+    }
+
+    return "-";
+  }
+
   return (
     <div style={{ padding: 16, border: "1px solid #ddd", margin: "16px 0" }}>
       <h2>Creator Dashboard (Manage Applications)</h2>
@@ -107,7 +128,7 @@ export default function CreatorDashboard() {
                 <tr key={p._id}>
                   <td>{p.title}</td>
                   <td>{p.status}</td>
-                  <td>{(p.assignedEditorID || "-").join(", ") || "-"}</td>
+                  <td>{formatAssignedEditors(p)}</td>
                   <td>
                     {/* <button onClick={() => manageProject(p._id)}>
                       Manage Applications
@@ -161,7 +182,8 @@ export default function CreatorDashboard() {
                       disabled={
                         pr.status === "accepted" ||
                         selectedProject?.status === "completed" ||
-                        selectedProject?.status === "in-progress"
+                        selectedProject?.status === "in-progress" ||
+                        selectedProject?.status === "closed"
                       }
                       onClick={() => acceptProposal(selectedProjectId, pr._id)}
                     >

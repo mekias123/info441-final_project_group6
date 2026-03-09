@@ -193,9 +193,18 @@ router.patch("/:projectId/proposals/:proposalId/accept", async (req, res) => {
   try {
     const { projectId, proposalId } = req.params;
     const allowMultiple = !!req.body?.allowMultiple;
+    const creatorID = req.body?.creatorID == null ? "" : String(req.body.creatorID).trim();
 
     const project = await req.project_model.findById(projectId);
     if (!project) return res.status(404).json({ error: "Project not found." });
+
+    if (!creatorID) {
+      return res.status(400).json({ error: "creatorID is required to accept a proposal." });
+    }
+
+    if (String(project.creatorID || "").trim() !== creatorID) {
+      return res.status(403).json({ error: "Only the project creator can accept a proposal." });
+    }
 
     if (project.status === "completed") {
       return res
@@ -208,7 +217,8 @@ router.patch("/:projectId/proposals/:proposalId/accept", async (req, res) => {
       return res.status(404).json({ error: "Proposal not found for this project." });
 
     if (proposal.status === "accepted") {
-      if (project.status === "open") project.status = "in-progress";
+      // if (project.status === "open") project.status = "in-progress";
+      if (project.status === "open") project.status = "closed";
       if (!project.assignedEditorIDs.includes(proposal.editorID)) {
         project.assignedEditorIDs.push(proposal.editorID);
       }
@@ -220,7 +230,7 @@ router.patch("/:projectId/proposals/:proposalId/accept", async (req, res) => {
     proposal.status = "accepted";
     await proposal.save();
 
-    project.status = "in-progress";
+    project.status = "closed";
 
     if (!project.assignedEditorIDs.includes(proposal.editorID)) {
       project.assignedEditorIDs.push(proposal.editorID);
