@@ -3,8 +3,10 @@ const router = express.Router();
 
 const Proposal = require("../../../models/Proposal");
 const Review = require("../../../models/Review");
+const chatRoutes = require("./chat");
 
 // All routes here will start with the path /api/project
+router.use("/:projectId/chatroom", chatRoutes);
 
 router.post("/", async (req, res) => {
   try {

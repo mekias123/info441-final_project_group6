@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import ProjectChat from "./ProjectChat";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:3001";
 
@@ -9,6 +10,8 @@ export default function PostingBoard() {
   const [editorID, setEditorID] = useState("");
   const [proposalsByProjectId, setProposalsByProjectId] = useState({});
   const [ratingByCreatorId, setRatingByCreatorId] = useState({}); // { creatorID: { averageRating, count } }
+  const [chatUserID, setChatUserID] = useState("");
+  const [chatProjectId, setChatProjectId] = useState(null);
 
   async function fetchPosts() {
     try {
@@ -121,6 +124,15 @@ export default function PostingBoard() {
     <div id="posting-board">
       <h1>Posting Board:</h1>
 
+      <label htmlFor="chat-user-id">Chat as User ID:</label>
+      <input
+        type="text"
+        id="chat-user-id"
+        value={chatUserID}
+        onChange={(e) => setChatUserID(e.target.value)}
+        placeholder="creator123 or editor456"
+      />
+
       <button onClick={fetchPosts}>Refresh/Search</button>
 
       <label htmlFor="title">Title:</label>
@@ -166,6 +178,7 @@ export default function PostingBoard() {
                 <td>
                   <button onClick={() => setActiveProjectId(project._id)}>Apply</button>
                   <button onClick={() => viewProposals(project._id)}>View Proposals</button>
+                  <button onClick={() => setChatProjectId(project._id)}>Open Chat</button>
                 </td>
               </tr>
 
@@ -185,6 +198,18 @@ export default function PostingBoard() {
                     />
                     <br />
                     <button onClick={() => applyToProject(project._id)}>Submit Application</button>
+                  </td>
+                </tr>
+              )}
+            
+              {chatProjectId === project._id && (
+                <tr>
+                  <td colSpan="8">
+                    {!chatUserID.trim() ? (
+                      <div>Enter your user ID above to open this project chat.</div>
+                    ) : (
+                      <ProjectChat projectId={project._id} userId={chatUserID} />
+                    )}
                   </td>
                 </tr>
               )}
