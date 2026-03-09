@@ -3,13 +3,14 @@ const router = express.Router({ mergeParams: true });
 
 const ChatRoom = require("../../../models/ChatRoom");
 const ChatMessage = require("../../../models/ChatMessage");
+const Proposal = require("../../../models/Proposal");
 
 function normalizeUserId(value) {
   if (value === null || typeof value === "undefined") return "";
   return String(value).trim();
 }
 
-function getParticipantsFromProject(project) {
+async function getParticipantsFromProject(project) {
   const participantSet = new Set();
 
   const creatorId = normalizeUserId(project.creatorID);
@@ -21,6 +22,14 @@ function getParticipantsFromProject(project) {
   (project.assignedEditorIDs || []).forEach((editorId) => {
     const normalized = normalizeUserId(editorId);
     if (normalized) participantSet.add(normalized);
+  });
+
+  // Include editors who have submitted proposals so creator/editor can chat both ways
+  // even before a final acceptance decision.
+  const proposals = await Proposal.find({ projectId: project._id }).select("editorID");
+  proposals.forEach((proposal) => {
+    const editorId = normalizeUserId(proposal.editorID);
+    if (editorId) participantSet.add(editorId);
   });
 
   return Array.from(participantSet);
@@ -36,7 +45,7 @@ async function getProjectOr404(projectModel, projectId, res) {
 }
 
 async function getOrCreateRoom(project) {
-  const participantIDs = getParticipantsFromProject(project);
+  const participantIDs = await getParticipantsFromProject(project);
 
   const room = await ChatRoom.findOneAndUpdate(
     { projectId: project._id },

@@ -11,5 +11,6 @@ createRoot(document.getElementById("root")).render(
 		<PostJob />
 		<PostingBoard />
 		<VideoReview />
+		<CreatorDashboard />
 	</StrictMode>,
 );

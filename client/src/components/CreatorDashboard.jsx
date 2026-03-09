@@ -17,12 +17,19 @@ export default function CreatorDashboard() {
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [proposals, setProposals] = useState([]);
   const [message, setMessage] = useState(null);
+  const [creatorID, setCreatorID] = useState("");
 
   async function loadProjects() {
+    if (!creatorID.trim()) {
+      setProjects([]);
+      return setMessage("Enter your Creator ID to manage your own project listings.");
+    }
+
     // status=all lets creators see jobs even after they're closed from public board
     const { ok, data } = await fetchJSON(`${API}/api/project?status=all`);
     if (!ok) return setMessage(data?.error || "Failed to load projects.");
     setProjects(data || []);
+    setMessage(null);
   }
 
   async function loadProposals(projectId) {
@@ -32,8 +39,9 @@ export default function CreatorDashboard() {
   }
 
   useEffect(() => {
+    if (!creatorID.trim()) return;
     loadProjects();
-  }, []);
+  }, [creatorID]);
 
   async function manageProject(projectId) {
     setSelectedProjectId(projectId);
@@ -47,7 +55,8 @@ export default function CreatorDashboard() {
       `${API}/api/project/${projectId}/proposals/${proposalId}/accept`,
       {
         method: "PATCH",
-        body: { allowMultiple: false }, // set true if you want to accept multiple without rejecting others
+        // body: { allowMultiple: false }, // set true if you want to accept multiple without rejecting others
+        body: { allowMultiple: false, creatorID: creatorID.trim() },
       }
     );
 
@@ -67,7 +76,18 @@ export default function CreatorDashboard() {
 
       {message && <div style={{ marginBottom: 12 }}>{message}</div>}
 
-      <button onClick={loadProjects}>Refresh Projects</button>
+      {/* <button onClick={loadProjects}>Refresh Projects</button> */}
+      <div style={{ marginBottom: 12 }}>
+        <label htmlFor="creator-dashboard-id">Your Creator ID: </label>
+        <input
+          id="creator-dashboard-id"
+          value={creatorID}
+          onChange={(e) => setCreatorID(e.target.value)}
+          placeholder="Enter Creator ID"
+          style={{ marginRight: 8 }}
+        />
+        <button onClick={loadProjects}>Load My Projects</button>
+      </div>
 
       <div style={{ display: "flex", gap: 16, marginTop: 16 }}>
         <div style={{ flex: 1 }}>
@@ -78,7 +98,7 @@ export default function CreatorDashboard() {
               <tr>
                 <th>Title</th>
                 <th>Status</th>
-                <th>Accepted Editors</th>
+                <th>Accepted Editor</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -87,11 +107,12 @@ export default function CreatorDashboard() {
                 <tr key={p._id}>
                   <td>{p.title}</td>
                   <td>{p.status}</td>
-                  <td>{(p.assignedEditorIDs || []).join(", ") || "-"}</td>
+                  <td>{(p.assignedEditorID || "-").join(", ") || "-"}</td>
                   <td>
-                    <button onClick={() => manageProject(p._id)}>
+                    {/* <button onClick={() => manageProject(p._id)}>
                       Manage Applications
-                    </button>
+                    </button> */}
+                    <button onClick={() => manageProject(p._id)}>Manage Applications</button>
                   </td>
                 </tr>
               ))}
@@ -128,17 +149,23 @@ export default function CreatorDashboard() {
                   }}
                 >
                   <div>
-                    <strong>{pr.editorID}</strong>{" "}
-                    <span style={{ opacity: 0.7 }}>({pr.status})</span>
+                    {/* <strong>{pr.editorID}</strong>{" "}
+                    <span style={{ opacity: 0.7 }}>({pr.status})</span> */}
+                    <strong>{pr.editorID}</strong> <span style={{ opacity: 0.7 }}>({pr.status})</span>
                   </div>
                   <div style={{ marginTop: 6 }}>{pr.coverLetter}</div>
 
                   <div style={{ marginTop: 8 }}>
                     <button
-                      disabled={pr.status === "accepted" || selectedProject?.status === "completed"}
+                      // disabled={pr.status === "accepted" || selectedProject?.status === "completed"}
+                      disabled={
+                        pr.status === "accepted" ||
+                        selectedProject?.status === "completed" ||
+                        selectedProject?.status === "in-progress"
+                      }
                       onClick={() => acceptProposal(selectedProjectId, pr._id)}
                     >
-                      Accept Editor & Close Job
+                      Choose This Editor & Close Listing
                     </button>
                   </div>
                 </div>
