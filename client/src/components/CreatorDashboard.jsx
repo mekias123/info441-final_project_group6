@@ -19,6 +19,11 @@ export default function CreatorDashboard() {
   const [message, setMessage] = useState(null);
   const [creatorID, setCreatorID] = useState("");
 
+  const [reviewProjectId, setReviewProjectId] = useState(null);
+  const [reviewEditorID, setReviewEditorID] = useState("");
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState("");
+
   async function loadProjects() {
     if (!creatorID.trim()) {
       setProjects([]);
@@ -68,6 +73,37 @@ export default function CreatorDashboard() {
     // refresh
     await loadProjects();
     await loadProposals(projectId);
+  }
+
+  async function submitReview(projectId) {
+    setMessage(null);
+
+    if (!creatorID.trim()) {
+      return setMessage("Enter your Creator ID before submitting a review.");
+    }
+
+    if (!reviewEditorID.trim()) {
+      return setMessage("No assigned editor found for this project.");
+    }
+
+    const { ok, data } = await fetchJSON(`${API}/api/review`, {
+      method: "POST",
+      body: {
+        projectId,
+        reviewerID: creatorID.trim(),
+        revieweeID: reviewEditorID.trim(),
+        rating: Number(reviewRating),
+        comment: reviewComment.trim(),
+      },
+    });
+
+    if (!ok) return setMessage(data?.error || "Failed to submit review.");
+
+    setMessage("Review submitted successfully.");
+    setReviewProjectId(null);
+    setReviewEditorID("");
+    setReviewRating(5);
+    setReviewComment("");
   }
 
   const selectedProject = projects.find((p) => p._id === selectedProjectId);
@@ -134,6 +170,20 @@ export default function CreatorDashboard() {
                       Manage Applications
                     </button> */}
                     <button onClick={() => manageProject(p._id)}>Manage Applications</button>
+                    {formatAssignedEditors(p) !== "-" && (
+                      <button
+                        style={{ marginLeft: 8 }}
+                        onClick={() => {
+                          setReviewProjectId(p._id);
+                          setReviewEditorID(formatAssignedEditors(p));
+                          setReviewRating(5);
+                          setReviewComment("");
+                          setMessage(null);
+                        }}
+                      >
+                        Leave Review
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -193,6 +243,63 @@ export default function CreatorDashboard() {
                 </div>
               ))}
             </>
+          )}
+
+          {reviewProjectId && (
+            <div
+              style={{
+                marginTop: 16,
+                border: "1px solid #ccc",
+                padding: 12,
+              }}
+            >
+              <h3>Leave Review</h3>
+              <div style={{ marginBottom: 8 }}>
+                <strong>Project ID:</strong> {reviewProjectId}
+              </div>
+              <div style={{ marginBottom: 8 }}>
+                <strong>Editor:</strong> {reviewEditorID}
+              </div>
+              <div style={{ marginBottom: 8 }}>
+                <label htmlFor="review-rating">Rating: </label>
+                <select
+                  id="review-rating"
+                  value={reviewRating}
+                  onChange={(e) => setReviewRating(e.target.value)}
+                  style={{ marginLeft: 8 }}
+                >
+                  <option value={1}>1</option>
+                  <option value={2}>2</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={5}>5</option>
+                </select>
+              </div>
+              <div style={{ marginBottom: 8 }}>
+                <textarea
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value)}
+                  placeholder="Write a short review"
+                  rows={4}
+                  style={{ width: "100%" }}
+                />
+              </div>
+              <div>
+                <button onClick={() => submitReview(reviewProjectId)}>Submit Review</button>
+                <button
+                  onClick={() => {
+                    setReviewProjectId(null);
+                    setReviewEditorID("");
+                    setReviewRating(5);
+                    setReviewComment("");
+                    setMessage(null);
+                  }}
+                  style={{ marginLeft: 8 }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
           )}
         </div>
       </div>
