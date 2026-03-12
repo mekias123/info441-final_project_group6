@@ -2,7 +2,11 @@
 INFO 441 Final Project proposal by group 6
 By: Gurleen Samra, Keira Wong, Keira Wong, Mekias Kebede, Tony Wu
 
-Link to MVP on render: https://info441-final-project-group6-1-client.onrender.com
+Link to site deployed on render: https://info441-final-project-group6-1-client.onrender.com
+
+Link to google doc containing diagram, user_stories, and endpoints : https://docs.google.com/document/d/1p_EXeq7vm5NI7dy0rRqFcjjhIKTW3kjfaNap1DOhHCc/edit?usp=sharing
+
+Link to presentation: https://docs.google.com/presentation/d/1B1gav6s9bRfbVPOgJfvYSW1B2Ps4oEw5FDU4lAfkSO0/edit?slide=id.p#slide=id.p
 
 Project Description:
 
@@ -19,7 +23,7 @@ Architectural Diagram:
 Data Flow:
 ![Data Flow Diagram](docs/data-flow.png)
 
-User Stories: ...
+User Stories:
 
 ![User Stories](docs/user_stories.png)
 
