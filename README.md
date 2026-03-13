@@ -16,9 +16,77 @@ Unlike generalized freelance platforms that cover everything from graphic design
 We were drawn to this project because it addresses problems we've personally observed in our own communities. Many of our peers who create content for YouTube, TikTok, or Instagram struggle with the editing obstacle where they have strong ideas and can film consistently, but editing feels overwhelming or produces results that don't match their vision. Simultaneously, we know talented video editors in film programs or early in their careers who struggle to find steady freelance work because they lack industry connections or don't know how to market themselves effectively. Existing platforms don't adequately serve either group because they're not designed with the specific workflows of video production in mind. Building a focused marketplace that solves these pain points through thoughtful system design feels like a meaningful contribution to the creator economy, and it combines practical problem-solving with an interesting technical challenge. This is a platform we would realistically use ourselves as students interested in content creation who understand both the value of high-quality edited content and the challenge of producing it consistently.
 
 
-Architectural Diagram:
+Architectural Diagram:                        
+                  
+                            +---------------------+                                                       
+                            |      FRONTEND       |
+                            |   React 19 + Vite   |
+                            +---------------------+
+                            |     Components:     |
+                            | - PostingBoard      |
+                            | - PostJob           |
+                            | - CreatorDashboard  |
+                            | - ProjectChat       |
+                            | - VideoReview       |
+                            +---------+-----------+
+                                      |
+                                HTTP / REST
+                                      |
+                            +---------v-----------+
+                            |      BACKEND        |
+                            |  Express.js (Node)  |
+                            +---------------------+
+                            |  Middleware:         |
+                            |  - CORS             |
+                            |  - Rate Limiting    |
+                            +--------+------------+
+                                     |
+                          +----------+----------+
+                          |     API Router      |
+                          |   server/routes/    |
+                          +----------+----------+
+                                     |
+            +------------+-----------+-----------+------------+
+            |            |                       |            |
+    +-------v------+ +---v--------+  +-----------v--+ +------v-------+
+    | /annotations | | /projects  |  |   /chat      | |  /reviews    |
+    | Controller   | | Controller |  |  Controller  | |  Controller  |
+    +--------------+ +------------+  +--------------+ +--------------+
+            |            |                       |            |
+            +------------+-----------+-----------+------------+
+                                     |
+                          +----------v----------+
+                          |      Mongoose       |
+                          |       (ODM)         |
+                          +----------+----------+
+                                     |
+            +------------+-----------+-----------+------------+
+            |            |           |           |            |
+    +-------v---+ +------v---+ +----v-----+ +---v------+ +---v--------+
+    | Annotation| | Project  | | ChatRoom | | ChatMsg  | | Review     |
+    |  Model    | |  Model   | |  Model   | |  Model   | |  Model     |
+    +-----------+ +----------+ +----------+ +----------+ +------------+
+            |            |           |           |            |
+            +------------+-----------+-----------+------------+
+                                     |
+                          +----------v----------+
+                          |      MongoDB        |
+                          |     (Database)      |
+                          +---------------------+
+                          
+      +===========================================================================+
+      |                          Tech Stack Summary                               |
+      +===========================================================================+
+      | Layer        | Technology                                                 |
+      |==============|============================================================|
+      | Frontend     | React 19, Vite 7, JSX                                      |
+      | Backend      | Node.js, Express 4                                         |
+      | Database     | MongoDB (via Mongoose 8 ODM)                               |
+      | Hosting      | Render (Static Site + Web Service)                         |
+      +===========================================================================+                        
 
-![Architectural Diagram](docs/Architectural_Diagram.png)
+
+
 
 Data Flow:
 ![Data Flow Diagram](docs/data-flow.png)
